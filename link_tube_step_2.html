@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="zh-Hant" type="text/html; charset=UTF-8">
+<title>仿星穹鐵道─小遊戲</title>
+<body>
+<script src="jquery-3.7.1.js" type="application/javascript" ></script>
+<canvas id="myCanvas" width="1600" height="2000"></canvas>
+
+<script type="application/javascript" charset="UTF-8">
+
+var c=document.getElementById("myCanvas");
+var ctx =c.getContext("2d", { willReadFrequently: true })
+
+
+ctx.fillStyle="#000000";
+
+//start 	224 190
+//end		216 181
+//l		218 185
+//l45r45	216 188
+//u90r45	216 179
+
+var start_unit = new temp_design("起始","start.jpg",554,300+185,3,224,190);
+var end_unit = new temp_design("結束","end.jpg",554,300-181,3,216,181);
+var l_unit = new temp_design("直線","l.jpg",554,300,3,218,185);
+var l45r45_unit = new temp_design("左45右45","l45r45.jpg",554-216,390-188,3,216,188);
+var u90r45_unit = new temp_design("上90右45","u90r45.jpg",554-216,390,3,216,179);
+
+
+var elements = [];
+elements.push(start_unit,end_unit,l_unit,l45r45_unit,u90r45_unit);
+
+
+var rotate_x=0;
+
+function temp_design(id,img,left,top,zIndex,width,height)
+{
+this.id=id;
+//this.image = img;
+this.image = new Image();
+this.image.src=img;
+var self=this;
+this.image.onload = function(){self.draw_flag=true; re_draw();}
+
+this.left= left;
+this.top= top;
+this.zIndex = zIndex;
+this.width=width;
+this.height=height;
+this.draw_flag = false;
+
+$(c).on('handleClick', function(e, mouse) {
+
+        if (self.left < mouse.x &&
+            self.left + self.width > mouse.x &&
+            self.top < mouse.y &&
+            self.top + self.height > mouse.y) {
+self.draw_flag = false;
+console.log(self.id);
+        }
+    });
+}
+
+
+function re_draw()
+{
+ctx.clearRect(0,0,c.width,c.height);
+
+elements.forEach(function(element) {
+	if(element.draw_flag)
+	{
+		ctx.drawImage(element.image,element.left, element.top,element.width,element.height);
+	}
+});
+
+}
+
+re_draw();
+
+
+$(c).on('click', function(e) {
+var mouse= {
+        x: e.pageX - c.offsetLeft,
+        y: e.pageY - c.offsetTop
+}
+         
+    //fire off synthetic event containing mouse coordinate info
+    $(c).trigger('handleClick', [mouse]);
+
+});
+
+
+</script>
+
+</body>
+</html>
