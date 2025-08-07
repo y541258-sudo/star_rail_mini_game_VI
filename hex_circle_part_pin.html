@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas 繪製正六邊形</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Canvas 繪製正六邊形</h1>
+    <canvas id="myCanvas" width="220" height="192"></canvas>
+
+    <script>
+        // 取得畫布和 2D 繪圖環境
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 定義正六邊形的參數
+        const centerX = canvas.width / 2;    // 中心點的 X 座標
+        const centerY = canvas.height / 2;   // 中心點的 Y 座標
+        const sideLength = 110;              // 邊長
+
+        // 繪製六邊形的函數
+        function drawHexagon() {
+            // 計算六個頂點的座標
+            const vertices = [];
+            const vertices_pin = [];
+            for (let i = 0; i < 6; i++) {
+                // 每個頂點的角度 (以弧度為單位)
+                const angleRad = (Math.PI / 180) * (60 * i);
+                
+                // 計算頂點的 X, Y 座標
+                const x = centerX + sideLength * Math.cos(angleRad);
+                const y = centerY + sideLength * Math.sin(angleRad);
+                vertices.push({x, y});
+            }
+
+            // 開始繪製路徑
+            ctx.beginPath();
+            
+            // 移動到第一個頂點
+            ctx.moveTo(vertices[0].x, vertices[0].y);
+            
+            // 依序連接其餘的頂點
+            for (let i = 1; i < vertices.length; i++) {
+                ctx.lineTo(vertices[i].x, vertices[i].y);
+            }
+            
+            // 封閉路徑
+            ctx.closePath();
+            
+            // 設置樣式並繪圖
+            //ctx.lineWidth = 5;          // 線條寬度
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#4CAF50';  // 線條顏色
+            //ctx.fillStyle = '#81C784';    // 填充顏色
+            
+            //ctx.fill();   // 填充六邊形
+            ctx.stroke(); // 繪製邊框
+
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, 22.5, 0, 2 * Math.PI);
+	ctx.stroke();
+
+	ctx.beginPath();
+	ctx.fillStyle = '#0000FF';
+	
+	vertices_pin.push([centerX - 10,centerY + 27.5],
+				[centerX - 10,centerY + 95],
+				[centerX + 10,centerY + 95],
+				[centerX + 10,centerY + 27.5]);
+
+ ctx.strokeStyle = '#0000FF';
+ctx.beginPath();
+            
+            // 移動到第一個頂點
+            ctx.moveTo(vertices_pin[0][0], vertices_pin[0][1]);
+console.log(vertices_pin[2][0]);
+            
+            // 依序連接其餘的頂點
+            for (let i = 1; i < vertices_pin.length; i++) {
+                ctx.lineTo(vertices_pin[i][0], vertices_pin[i][1]);
+            }
+            
+            // 封閉路徑
+            ctx.closePath();
+
+	ctx.fill();
+	ctx.stroke();
+        }
+
+        // 呼叫函數來繪製六邊形
+        drawHexagon();
+    </script>
+</body>
+</html>
